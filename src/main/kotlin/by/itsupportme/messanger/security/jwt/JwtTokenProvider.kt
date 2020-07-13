@@ -27,55 +27,55 @@ class JwtTokenProvider(
         val userDetailsService: UserDetailsService
 
 ) {
-        fun createToken(username: String, roles: List<Role>): String {
-                val claims = Jwts.claims().setSubject(username)
-                claims["roles"] = getRoleNames(roles)
-                val now = Date()
-                val validity = Date(now.time + expired)
-                return Jwts.builder()
-                        .setClaims(claims)
-                        .setIssuedAt(now)
-                        .setExpiration(validity)
-                        .signWith(SignatureAlgorithm.HS256, secret)
-                        .compact()
+    fun createToken(username: String, roles: List<Role>): String {
+        val claims = Jwts.claims().setSubject(username)
+        claims["roles"] = getRoleNames(roles)
+        val now = Date()
+        val validity = Date(now.time + expired)
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact()
+    }
+
+    fun getAuthentication(token: String): Authentication {
+        val userDetails = userDetailsService.loadUserByUsername(getUsername(token))
+        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
+    }
+
+    fun getUsername(token: String): String {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).body.subject
+    }
+
+    fun validateToken(token: String): Boolean {
+        try {
+            val claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token)
+            return !claims.body.expiration.before(Date())
+        } catch (e: JwtException) {
+            throw JwtAuthenticationException("JWT token is expired or invalid")
+        } catch (e: IllegalArgumentException) {
+            throw JwtAuthenticationException("JWT token is expired or invalid")
         }
 
-        fun getAuthentication(token: String): Authentication? {
-                val userDetails = userDetailsService.loadUserByUsername(getUsername(token))
-                return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
+    }
+
+    fun getRoleNames(userRoles: List<Role>): List<String> {
+        val roles = mutableListOf<String>()
+        for (userRole in userRoles) {
+            roles.add(userRole.name)
         }
 
-        fun getUsername(token: String): String {
-                return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).body.subject
+        return roles
+    }
+
+    fun resolveToken(req: HttpServletRequest): String? {
+        val bearerToken = req.getHeader("Authorization")
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7)
         }
 
-        fun validateToken(token: String): Boolean {
-                try {
-                        val claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token)
-                        return !claims.body.expiration.before(Date())
-                } catch (e: JwtException) {
-                        throw JwtAuthenticationException("JWT token is expired or invalid")
-                } catch (e: IllegalArgumentException) {
-                        throw JwtAuthenticationException("JWT token is expired or invalid")
-                }
-
-        }
-
-        fun getRoleNames(userRoles: List<Role>): List<String> {
-                val roles = mutableListOf<String>()
-                for (userRole in userRoles) {
-                        roles.add(userRole.name)
-                }
-
-                return roles
-        }
-
-        fun resolveToken(req: HttpServletRequest): String? {
-                val bearerToken = req.getHeader("Authorization")
-                if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-                        return bearerToken.substring(7)
-                }
-
-                return null
-        }
+        return null
+    }
 }
