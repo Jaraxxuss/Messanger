@@ -14,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
-
 @EnableWebSecurity
 class WebSecurityConfig(
         @Autowired
@@ -28,34 +27,34 @@ class WebSecurityConfig(
         val userDetailsService: UserDetailsService
 
 ) : WebSecurityConfigurerAdapter() {
-        override fun configure(http: HttpSecurity?) {
-                http
-                        ?.cors()
-                        ?.and()
-                        ?.csrf()
-                        ?.disable()?.authorizeRequests()
-                        ?.antMatchers("/login", "/register")
-                        ?.permitAll()
-                        ?.anyRequest()?.authenticated()
-                        ?.and()
-                        ?.apply(JwtConfigurer(jwtTokenProvider))
-                        ?.and()
-                        ?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                        ?.and()
-                        ?.logout()?.logoutSuccessUrl("/")
-                        ?.permitAll()
+    override fun configure(http: HttpSecurity?) {
+        http
+                ?.cors()
+                ?.and()
+                ?.csrf()
+                ?.disable()?.authorizeRequests()
+                ?.antMatchers("/login", "/register")
+                ?.permitAll()
+                ?.anyRequest()?.authenticated()
+                ?.and()
+                ?.apply(JwtConfigurer(jwtTokenProvider))
+                ?.and()
+                ?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                ?.and()
+                ?.logout()?.logoutSuccessUrl("/")
+                ?.permitAll()
 
-        }
+    }
 
-        override fun configure(auth: AuthenticationManagerBuilder?) {
-                auth?.userDetailsService(userDetailsService)?.passwordEncoder(bCryptPasswordEncoder)
-        }
+    override fun configure(auth: AuthenticationManagerBuilder?) {
+        auth?.userDetailsService(userDetailsService)?.passwordEncoder(bCryptPasswordEncoder)
+    }
 
-        @Bean
-        @Throws(Exception::class)
-        override fun authenticationManagerBean(): AuthenticationManager? {
-                return super.authenticationManagerBean()
-        }
+    @Bean
+    @Throws(Exception::class)
+    override fun authenticationManagerBean(): AuthenticationManager? {
+        return super.authenticationManagerBean()
+    }
 
 
 }

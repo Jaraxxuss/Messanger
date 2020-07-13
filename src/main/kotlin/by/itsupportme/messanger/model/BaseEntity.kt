@@ -2,7 +2,7 @@ package by.itsupportme.messanger.model
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
-import java.sql.Date
+import java.util.Date
 import javax.persistence.*
 
 @MappedSuperclass

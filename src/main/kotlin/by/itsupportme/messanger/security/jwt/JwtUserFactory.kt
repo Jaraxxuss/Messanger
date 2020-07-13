@@ -11,12 +11,9 @@ object JwtUserFactory {
         fun create(user: User): JwtUser {
                 return JwtUser(
                         user.username,
-                        user.firstName,
-                        user.lastName,
                         user.password,
                         mapToGrantedAuthorities(user.roles),
-                        user.status?.equals(Status.ACTIVE),
-                        user.updated
+                        user.status?.equals(Status.ACTIVE)
                 )
         }
 

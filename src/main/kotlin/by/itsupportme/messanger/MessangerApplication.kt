@@ -8,13 +8,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 @SpringBootApplication
 class MessangerApplication{
     @Bean
-    fun bCryptPasswordEncoder() : BCryptPasswordEncoder{
-        return BCryptPasswordEncoder()
-    }
+    fun bCryptPasswordEncoder() = BCryptPasswordEncoder()
 }
 
 fun main(args: Array<String>) {
     runApplication<MessangerApplication>(*args)
 }
-
-

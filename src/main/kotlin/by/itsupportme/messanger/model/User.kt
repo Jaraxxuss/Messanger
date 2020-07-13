@@ -15,8 +15,8 @@ class User(
         val lastName: String? = null,
 
         @Column(name = "password")
-        var password: String,
+        var password: String = "",
 
         @ManyToMany(fetch = FetchType.EAGER)
-        var roles: MutableList<Role>
+        var roles: MutableList<Role> = mutableListOf()
 ) : BaseEntity()

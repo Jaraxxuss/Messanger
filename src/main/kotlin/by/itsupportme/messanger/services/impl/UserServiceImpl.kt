@@ -18,7 +18,10 @@ class UserServiceImpl(
         @Autowired
         val bCryptPasswordEncoder: BCryptPasswordEncoder
 ): UserService {
-        override fun register(user: User): User {
+        override fun register(user: User): User? {
+                if (userRepo.existsUserByUsername(user.username)){
+                        return null
+                }
                 val userRole = roleRepo.findByName("ROLE_USER")
                 user.password = bCryptPasswordEncoder.encode(user.password)
                 user.roles.add(userRole)

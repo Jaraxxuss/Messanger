@@ -2,17 +2,13 @@ package by.itsupportme.messanger.security.jwt
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import java.sql.Date
+import java.util.Date
 
 class JwtUser(
-        val userName: String,
-        val firstName: String?,
-        val lastName: String?,
-        val pass: String,
-        val myAuthorities: MutableCollection<out GrantedAuthority>,
-        val enabled: Boolean?,
-        val updated: Date?
-
+        private val userName: String,
+        private val pass: String,
+        private val myAuthorities: MutableCollection<out GrantedAuthority>,
+        private val enabled: Boolean?
 
 ) : UserDetails {
         override fun getAuthorities(): MutableCollection<out GrantedAuthority> {

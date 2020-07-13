@@ -13,8 +13,8 @@ class JwtUserDetailsService(
         @Autowired
         val userService: UserService
 ) : UserDetailsService {
-        override fun loadUserByUsername(username: String?): UserDetails {
-                val user = userService.findByUsername(username) ?: throw UsernameNotFoundException("User not found")
-                return JwtUserFactory.create(user)
-        }
+    override fun loadUserByUsername(username: String?): UserDetails {
+        val user = userService.findByUsername(username) ?: throw UsernameNotFoundException("User not found")
+        return JwtUserFactory.create(user)
+    }
 }

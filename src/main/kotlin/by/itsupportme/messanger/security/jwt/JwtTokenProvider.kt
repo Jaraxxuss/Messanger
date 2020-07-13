@@ -23,8 +23,6 @@ class JwtTokenProvider(
         @Value("\${jwt.token.expired}")
         val expired: Long,
         @Autowired
-        val bCryptPasswordEncoder: BCryptPasswordEncoder,
-        @Autowired
         @Qualifier("jwtUserDetailsService")
         val userDetailsService: UserDetailsService
 
