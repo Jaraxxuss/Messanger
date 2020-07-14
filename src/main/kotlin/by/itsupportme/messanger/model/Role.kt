@@ -5,9 +5,6 @@ import javax.persistence.*
 @Entity
 @Table(name = "roles")
 class Role(
-        @Column(name = "name")
-        val name: String,
-
-        @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
+        @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
         val users: List<User>
-) : BaseEntity()
+) : NameEntity()

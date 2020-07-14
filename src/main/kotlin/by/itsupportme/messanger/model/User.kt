@@ -1,5 +1,6 @@
 package by.itsupportme.messanger.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
@@ -15,8 +16,10 @@ class User(
         val lastName: String? = null,
 
         @Column(name = "password")
+        @JsonIgnore
         var password: String = "",
 
         @ManyToMany(fetch = FetchType.EAGER)
+        @JsonIgnore
         var roles: MutableList<Role> = mutableListOf()
 ) : BaseEntity()

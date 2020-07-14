@@ -1,7 +1,9 @@
 package by.itsupportme.messanger.configs
 
+import by.itsupportme.messanger.controllers.AuthController
 import by.itsupportme.messanger.security.jwt.JwtConfigurer
 import by.itsupportme.messanger.security.jwt.JwtTokenProvider
+import by.itsupportme.messanger.security.jwt.filters.JwtTokenFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
@@ -52,9 +54,7 @@ class WebSecurityConfig(
 
     @Bean
     @Throws(Exception::class)
-    override fun authenticationManagerBean(): AuthenticationManager? {
-        return super.authenticationManagerBean()
-    }
+    override fun authenticationManagerBean(): AuthenticationManager? = super.authenticationManagerBean()
 
 
 }

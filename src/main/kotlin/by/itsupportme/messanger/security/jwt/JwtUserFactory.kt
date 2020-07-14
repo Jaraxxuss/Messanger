@@ -8,17 +8,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.util.stream.Collectors
 
 object JwtUserFactory {
-        fun create(user: User): JwtUser {
-                return JwtUser(
-                        user.username,
-                        user.password,
-                        mapToGrantedAuthorities(user.roles),
-                        user.status?.equals(Status.ACTIVE)
-                )
-        }
+    fun create(user: User): JwtUser {
+        return JwtUser(
+                user.username,
+                user.password,
+                mapToGrantedAuthorities(user.roles),
+                user.status?.equals(Status.ACTIVE)
+        )
+    }
 
-        private fun mapToGrantedAuthorities(userRoles: List<Role>): MutableList<GrantedAuthority> {
-                return userRoles.stream()
-                        .map { role: Role -> SimpleGrantedAuthority(role.name) }.collect(Collectors.toList())
-        }
+    private fun mapToGrantedAuthorities(userRoles: List<Role>): MutableList<GrantedAuthority> {
+        return userRoles.stream()
+                .map { SimpleGrantedAuthority(it.name) }.collect(Collectors.toList())
+    }
 }

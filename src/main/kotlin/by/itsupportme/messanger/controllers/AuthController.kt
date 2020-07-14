@@ -26,13 +26,13 @@ class AuthController(
         @Autowired
         val authenticationManager: AuthenticationManager
 ) {
-    @PostMapping("/register")
+    @PostMapping("\${mapping.auth.register}")
     fun register(@RequestBody authDto: AuthDto): ResponseEntity<Any> {
-        userService.register(authDto.toUser()) ?: return ResponseEntity<Any>(HttpStatus.FORBIDDEN)
+        userService.register(authDto.toUser()) ?: return ResponseEntity(HttpStatus.BAD_REQUEST)
         return ResponseEntity.ok().build()
     }
 
-    @PostMapping("/login")
+    @PostMapping("\${mapping.auth.login}")
     fun login(@RequestBody authDto: AuthDto): ResponseEntity<Any> {
         try {
             val username = authDto.username

@@ -27,6 +27,9 @@ class JwtTokenProvider(
         val userDetailsService: UserDetailsService
 
 ) {
+    @Value("\${jwt.token.authority}")
+    lateinit var authority: String
+
     fun createToken(username: String, roles: List<Role>): String {
         val claims = Jwts.claims().setSubject(username)
         claims["roles"] = getRoleNames(roles)
@@ -70,12 +73,16 @@ class JwtTokenProvider(
         return roles
     }
 
-    fun resolveToken(req: HttpServletRequest): String? {
-        val bearerToken = req.getHeader("Authorization")
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7)
-        }
+    fun resolveToken(req: HttpServletRequest): String {
+        val bearerToken = req.getHeader(authority)
+        return resolveToken(bearerToken)
+    }
 
-        return null
+    fun resolveToken(bearerToken: String): String {
+        if (bearerToken.isEmpty() || !bearerToken.startsWith("Bearer ")) {
+
+        }
+        return bearerToken.substring(7)
+
     }
 }
